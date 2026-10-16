@@ -1,1 +1,609 @@
+#popup {
+  border: 10px solid #050505;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 400px;
+}
 
+#popup::backdrop {
+  background: rgba(10, 157, 27, 0.5);
+}
+
+#videoPlayerContainer {
+  width: min(100%, 800px);
+  aspect-ratio: 16 / 9;
+  margin-top: 1rem;
+}
+
+#satisfyingVideo {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+body {
+  background-color: #ddda21;
+}
+
+.asteroid-game {
+  --space: #17312d;
+  --space-edge: #315149;
+  --signal: #e77e55;
+  max-width: 760px;
+  margin: 3rem auto;
+}
+
+.game-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.game-kicker {
+  margin: 0 0 0.25rem;
+  color: #54766a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.game-heading h2 {
+  margin: 0;
+}
+
+.game-damage {
+  margin: 0.4rem 0 0;
+  color: #496a5e;
+  font-size: 0.85rem;
+}
+
+.game-damage small {
+  display: block;
+  color: #54766a;
+  font-size: 0.75rem;
+}
+
+.asteroid-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 1rem 0;
+}
+
+.launcher-setting {
+  display: grid;
+  gap: 0.45rem;
+  color: #203b33;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.launcher-setting span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.launcher-setting output {
+  color: #a44b30;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.launcher-setting select {
+  min-height: 38px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #8ca095;
+  border-radius: 4px;
+  background: #fff;
+  color: #203b33;
+  font: inherit;
+}
+
+.launcher-setting input {
+  width: 100%;
+  accent-color: #bd5635;
+}
+
+.game-score {
+  margin: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-score span {
+  color: #b74f31;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.throw-board {
+  position: relative;
+  height: clamp(360px, 54vw, 480px);
+  overflow: hidden;
+  border: 1px solid var(--space-edge);
+  border-radius: 8px;
+  isolation: isolate;
+}
+
+.google-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.map-hint {
+  position: absolute;
+  z-index: 2;
+  top: 0.75rem;
+  left: 0.75rem;
+  margin: 0;
+  padding: 0.45rem 0.65rem;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #203b33;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.place-search {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.place-search label {
+  color: #203b33;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.place-search > div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.place-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #8ca095;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.map-search-button {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #697d72;
+  border-radius: 4px;
+  background: #fff;
+  color: #203b33;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.map-search-button:hover {
+  background: #edf2ec;
+}
+
+.map-effects {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.asteroid-projectile {
+  position: absolute;
+  z-index: 2;
+  width: var(--projectile-size);
+  aspect-ratio: 1;
+  border: 2px solid #65402d;
+  border-radius: 37% 48% 40% 45%;
+  background:
+    radial-gradient(circle at 34% 30%, #e9c18e 0 8%, transparent 9%),
+    radial-gradient(circle at 68% 62%, #634331 0 12%, transparent 13%),
+    radial-gradient(circle at 42% 68%, #8e5b3a 0 10%, transparent 11%),
+    #bd7950;
+  box-shadow: inset -7px -8px 10px rgba(56, 33, 20, 0.48), 0 0 20px 8px rgba(255, 117, 45, 0.65);
+  pointer-events: none;
+}
+
+.impact-crater {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--crater-size);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 3px solid #e65336;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 45, 31, 0.76), rgba(227, 83, 54, 0.22) 58%, transparent 72%);
+  box-shadow: 0 0 0 8px rgba(255, 188, 86, 0.4), 0 0 38px 16px rgba(255, 119, 47, 0.8);
+  animation: impact-blast 900ms ease-out both;
+}
+
+.asteroid-projectile::before {
+  position: absolute;
+  top: 50%;
+  right: 70%;
+  width: 90px;
+  height: 18px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255, 111, 42, 0.18), rgba(255, 193, 94, 0.9));
+  content: "";
+  filter: blur(5px);
+}
+
+@keyframes impact-blast {
+  0% { opacity: 0; scale: 0.35; }
+  35% { opacity: 1; scale: 1.08; }
+  100% { opacity: 0.9; scale: 1; }
+}
+
+.launch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.impact-location {
+  margin: 0;
+  color: #496a5e;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.defense-launch:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.game-status {
+  min-height: 1.5em;
+  margin: 0.75rem 0 0;
+  color: #496a5e;
+  font-weight: 600;
+}
+
+.defense-launch,
+.defense-restart {
+  padding: 0.7rem 1rem;
+  border: 1px solid #183e3b;
+  border-radius: 4px;
+  background: #183e3b;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.defense-launch:hover,
+.defense-restart:hover {
+  background: #285b53;
+}
+
+.defense-launch:focus-visible,
+.defense-restart:focus-visible,
+.defense-canvas:focus-visible {
+  outline: 3px solid #b74f31;
+  outline-offset: 3px;
+}
+
+.defense-game {
+  max-width: 760px;
+  margin: 2rem auto 3rem;
+}
+
+.defense-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.defense-heading h2 {
+  margin: 0;
+}
+
+.defense-scoreboard {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  color: #203b33;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.defense-boss-health {
+  color: #a83e34;
+}
+
+.defense-scoreboard p {
+  margin: 0;
+}
+
+.defense-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 460;
+  border: 1px solid #315149;
+  border-radius: 6px;
+  background-color: #122522;
+  background-image:
+    radial-gradient(circle, rgba(226, 237, 211, 0.55) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(226, 237, 211, 0.3) 1px, transparent 1.5px);
+  background-position: 16px 19px, 61px 47px;
+  background-size: 91px 83px, 127px 109px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.defense-restart {
+  margin-top: 0.35rem;
+}
+
+.dino-runner {
+  max-width: 760px;
+  margin: 2rem auto 3rem;
+}
+
+.dino-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.dino-heading h2 {
+  margin: 0;
+}
+
+.dino-score {
+  margin: 0;
+  color: #203b33;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.dino-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 230;
+  border: 1px solid #315149;
+  border-radius: 6px;
+  background: #f4f6ef;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.dino-canvas:focus-visible,
+.dino-start:focus-visible {
+  outline: 3px solid #b74f31;
+  outline-offset: 3px;
+}
+
+.dino-start {
+  padding: 0.7rem 1rem;
+  border: 1px solid #183e3b;
+  border-radius: 4px;
+  background: #183e3b;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dino-start:hover {
+  background: #285b53;
+}
+
+.runner3d {
+  max-width: 1000px;
+  margin: 3rem auto 4rem;
+}
+
+.runner3d-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.runner3d-heading h2 {
+  margin: 0;
+}
+
+.runner3d-scoreboard {
+  display: flex;
+  gap: 1.5rem;
+  color: #203b33;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.runner3d-scoreboard p {
+  margin: 0;
+}
+
+.runner3d-scoreboard output {
+  color: #a83e34;
+}
+
+.runner3d-stage {
+  position: relative;
+  overflow: hidden;
+  background: #b8d8d2;
+}
+
+.runner3d-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(380px, 58vw, 620px);
+  touch-action: none;
+}
+
+.runner3d-canvas:focus-visible {
+  outline: 3px solid #f2be59;
+  outline-offset: 3px;
+}
+
+.runner3d-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(17, 39, 37, 0.3);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(7, 20, 19, 0.75);
+}
+
+.runner3d-overlay[hidden] {
+  display: none;
+}
+
+.runner3d-overlay-kicker {
+  margin: 0;
+  color: #ffd06c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.runner3d-overlay-message {
+  max-width: 28rem;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.runner3d-start {
+  min-height: 46px;
+  padding: 0.65rem 1.25rem;
+  border: 0;
+  border-radius: 4px;
+  background: #d94e3d;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  text-shadow: none;
+}
+
+.runner3d-start:hover {
+  background: #b83d31;
+}
+
+.runner3d-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.runner3d-controls button {
+  width: 54px;
+  height: 48px;
+  border: 1px solid #496a5e;
+  border-radius: 4px;
+  background: #f8f8ed;
+  color: #203b33;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.runner3d-controls button:nth-child(2) {
+  border-color: #183e3b;
+  background: #183e3b;
+  color: #fff;
+}
+
+.runner3d-controls button:active {
+  transform: translateY(1px);
+}
+
+.runner3d-controls button:focus-visible,
+.runner3d-start:focus-visible {
+  outline: 3px solid #f2be59;
+  outline-offset: 3px;
+}
+
+.runner3d .game-status {
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .asteroid-game {
+    margin: 2rem 0;
+  }
+
+  .asteroid-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .throw-board {
+    height: 400px;
+  }
+
+  .map-hint {
+    max-width: calc(100% - 4rem);
+    font-size: 0.72rem;
+  }
+
+  .place-search > div {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .launch-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .launch-row .defense-launch {
+    width: 100%;
+  }
+
+  .runner3d {
+    margin: 2rem 0 3rem;
+  }
+
+  .runner3d-heading {
+    align-items: start;
+  }
+
+  .runner3d-scoreboard {
+    align-items: end;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.85rem;
+  }
+
+  .runner3d-canvas {
+    height: 420px;
+  }
+}
