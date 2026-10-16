@@ -1,1 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test-Website
+  </title>
 
+  <link rel="stylesheet" href="style.css">
+  <script src="scipt.js" defer></script>
+  <script type="module" src="runner3d.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Keine Ahnung Website</h1>
+  </header>
+
+  <main>
+    <section class="asteroid-game" aria-labelledby="asteroidGameTitle">
+      <div class="game-heading">
+        <div>
+          <p class="game-kicker">EINSCHLAG-SIMULATOR</p>
+          <h2 id="asteroidGameTitle">Asteroidenwurf</h2>
+          <p class="game-damage">
+            Einschlagsenergie: <output id="impactEnergy">0</output> Mt TNT
+            <small><output id="asteroidModelDiameter">500 m</output> Durchmesser · <output id="asteroidModelMaterial">Eisen</output> · <output id="asteroidModelSpeed">38 km/s</output> · <output id="asteroidModelAngle">45°</output></small>
+          </p>
+        </div>
+        <p class="game-score"><span id="impactCount">0</span> Treffer</p>
+      </div>
+
+      <div class="asteroid-controls">
+        <label class="launcher-setting">
+          <span>Material</span>
+          <select id="asteroidMaterial">
+            <option value="iron" data-density="7800">Eisen</option>
+            <option value="stone" data-density="3000">Stein</option>
+            <option value="comet" data-density="1000">Komet</option>
+          </select>
+        </label>
+        <label class="launcher-setting">
+          <span>Durchmesser <output id="diameterValue">500 m</output></span>
+          <input id="asteroidDiameter" type="range" min="50" max="3000" step="50" value="500">
+        </label>
+        <label class="launcher-setting">
+          <span>Geschwindigkeit <output id="speedValue">38 km/s</output></span>
+          <input id="asteroidSpeed" type="range" min="11" max="72" step="1" value="38">
+        </label>
+        <label class="launcher-setting">
+          <span>Einschlagswinkel <output id="angleValue">45°</output></span>
+          <input id="asteroidAngle" type="range" min="15" max="90" step="5" value="45">
+        </label>
+      </div>
+
+      <form class="place-search" id="impactSearchForm">
+        <label for="impactPlaceInput">Einschlagsort suchen</label>
+        <div>
+          <input id="impactPlaceInput" type="search" placeholder="Ort oder Koordinaten eingeben" required>
+          <button class="map-search-button" type="submit">Auf Karte anzeigen</button>
+        </div>
+      </form>
+
+      <div class="throw-board" id="impactMap" aria-label="Google Maps Karte">
+        <iframe
+          class="google-map"
+          id="googleMap"
+          title="Google Maps Karte für den Einschlagsort"
+          src="https://maps.google.com/maps?q=World&z=2&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        <div class="map-effects" id="mapEffects" aria-hidden="true"></div>
+        <p class="map-hint" id="mapHint">Ort oben suchen, dann Asteroid starten</p>
+      </div>
+      <div class="launch-row">
+        <p class="impact-location" id="impactLocation">Kein Einschlagort gewählt</p>
+        <button class="defense-launch" id="launchAsteroidButton" type="button" disabled>Asteroid starten</button>
+      </div>
+      <p class="game-status" id="throwStatus" role="status" aria-live="polite">Suche einen Einschlagsort auf Google Maps.</p>
+      <button class="defense-launch" id="openDefenseButton" type="button">Asteroidenabwehr starten</button>
+    </section>
+
+    <section class="defense-game" id="asteroidDefense" aria-labelledby="defenseTitle" hidden>
+      <div class="defense-heading">
+        <div>
+          <p class="game-kicker">VERTEIDIGUNGSSYSTEM</p>
+          <h2 id="defenseTitle">Asteroidenabwehr</h2>
+        </div>
+        <div class="defense-scoreboard" aria-label="Spielstand">
+          <p>Punkte <output id="defenseScore">0</output></p>
+          <p>Schilde <output id="defenseLives">3</output></p>
+          <p class="defense-boss-health" id="defenseBossPanel" hidden>Boss <output id="defenseBossHealth">50</output>/50 Treffer</p>
+        </div>
+      </div>
+
+      <canvas
+        class="defense-canvas"
+        id="defenseCanvas"
+        width="760"
+        height="460"
+        tabindex="0"
+        aria-label="Asteroidenabwehr. Mit den Pfeiltasten zielen, mit der Leertaste feuern. Auch über Zeigen und Klicken bedienbar.">
+      </canvas>
+      <p class="game-status" id="defenseStatus" role="status" aria-live="polite">Noch keine Runde.</p>
+      <button class="defense-restart" id="restartDefenseButton" type="button" hidden>Neue Runde</button>
+    </section>
+
+    <section class="dino-runner" aria-labelledby="dinoTitle">
+      <div class="dino-heading">
+        <div>
+          <p class="game-kicker">ENDLESS RUNNER</p>
+          <h2 id="dinoTitle">Dino-Lauf</h2>
+        </div>
+        <p class="dino-score">Punkte <output id="dinoScore">0</output></p>
+      </div>
+      <canvas
+        class="dino-canvas"
+        id="dinoCanvas"
+        width="760"
+        height="230"
+        tabindex="0"
+        aria-label="Dino-Lauf. Mit Leertaste, Pfeil nach oben oder Tippen springen und Hindernissen ausweichen.">
+      </canvas>
+      <p class="game-status" id="dinoStatus" role="status" aria-live="polite">Bereit zum Laufen.</p>
+      <button class="dino-start" id="dinoStartButton" type="button">Spiel starten</button>
+    </section>
+
+    <section class="runner3d" aria-labelledby="runner3dTitle">
+      <div class="runner3d-heading">
+        <div>
+          <p class="game-kicker">3D ENDLESS RUNNER</p>
+          <h2 id="runner3dTitle">Würfeljagd</h2>
+        </div>
+        <div class="runner3d-scoreboard" aria-label="Spielstand">
+          <p>Punkte <output id="runner3dScore">0</output></p>
+          <p>Abstand <output id="runner3dDistance">54</output> m</p>
+        </div>
+      </div>
+
+      <div class="runner3d-stage">
+        <canvas
+          class="runner3d-canvas"
+          id="runner3dCanvas"
+          tabindex="0"
+          aria-label="3D-Laufspiel mit drei Spuren, Hindernissen und einem roten Würfel als Verfolger">
+        </canvas>
+        <div class="runner3d-overlay" id="runner3dOverlay">
+          <p class="runner3d-overlay-kicker">NICHT ERWISCHEN LASSEN</p>
+          <p class="runner3d-overlay-message" id="runner3dOverlayMessage">Der rote Würfel ist direkt hinter dir.</p>
+          <button class="runner3d-start" id="runner3dStartButton" type="button">Spiel starten</button>
+        </div>
+      </div>
+      <div class="runner3d-controls" aria-label="Spielsteuerung">
+        <button type="button" id="runner3dLeftButton" aria-label="Eine Spur nach links" title="Spur links">←</button>
+        <button type="button" id="runner3dJumpButton" aria-label="Springen" title="Springen">↑</button>
+        <button type="button" id="runner3dRightButton" aria-label="Eine Spur nach rechts" title="Spur rechts">→</button>
+      </div>
+      <p class="game-status" id="runner3dStatus" role="status" aria-live="polite">Wechsle die Spur und spring über Hindernisse.</p>
+    </section>
+  </main>
+<button type="button" id="openPopupBtn">Nicht wirklich Nutz Knopf</button>
+<button type="button" id="clickCounterBtn">Stimulation: 0 mal</button>
+<button type="button" id="playVideoBtn">Satisfying-Video abspielen</button>
+
+<div id="videoPlayerContainer" hidden>
+  <iframe
+    id="satisfyingVideo"
+    title="Satisfying Videos Of Workers Doing Their Job Perfectly"
+    allow="autoplay; encrypted-media; picture-in-picture; web-share"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<dialog id="popup">
+  <h2>...</h2>
+  <p>Wenn du das siehst, dann hat es Funktioniert</p>
+  <button type="button" id="closePopupBtn">Schließen</button>
+</dialog>
+  <footer id="kontak">
+  </footer>
+</body>
+</html>
